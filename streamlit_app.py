@@ -3,9 +3,9 @@ import google.generativeai as genai
 from PIL import Image
 import yfinance as yf
 
-# 1. Konfigurasi Halaman
+# 1. Konfigurasi Halaman - Menegaskan Level Pro
 st.set_page_config(
-    page_title="ICT Master Audit AI",
+    page_title="ICT Elite Audit Pro AI",
     page_icon="⚖️",
     layout="wide"
 )
@@ -14,7 +14,8 @@ st.set_page_config(
 # API Key Anda: AIzaSyAXHdTyql-rk4VnBAyFGlXjOCgZHPs8lk8
 genai.configure(api_key="AIzaSyAXHdTyql-rk4VnBAyFGlXjOCgZHPs8lk8")
 
-st.title("⚖️ ICT Master Trader Audit AI")
+st.title("⚖️ ICT Elite Audit Pro AI")
+st.caption("Powered by Google Gemini 1.5 Pro - Analisa Level Institusional")
 st.markdown("---")
 
 # --- SIDEBAR: MONITORING HARGA LIVE ---
@@ -39,54 +40,63 @@ with st.sidebar:
         st.write("Memuat harga...")
     
     st.markdown("---")
-    st.caption("Model: Gemini 1.5 Flash Pro v2")
+    st.info("Catatan: Data Live memiliki delay ±15 menit.")
 
 # --- MAIN: UPLOAD MULTI-TIMEFRAME ---
 st.subheader("📸 Audit Struktur Market (Daily, H1, M5)")
-st.info("Unggah 3 screenshot chart Anda untuk mendapatkan audit ketat dari AI.")
+st.info("PENTING: Unggah 3 screenshot dengan urutan: 1. Daily (Trend), 2. H1 (Struktur), 3. M5 (Entry)")
 
 uploaded_files = st.file_uploader(
-    "Upload 3 Gambar (Urutan: Daily, H1, M5)", 
+    "Upload 3 Gambar Chart Anda", 
     type=['png', 'jpg', 'jpeg'], 
     accept_multiple_files=True
 )
 
 if uploaded_files:
-    cols = st.columns(len(uploaded_files))
-    for i, file in enumerate(uploaded_files):
+    # Membatasi input agar AI tidak bingung
+    if len(uploaded_files) > 3:
+        st.warning("Mohon unggah hanya 3 gambar untuk Top-Down Analysis yang akurat. Gambar tambahan akan diabaikan.")
+        files_to_process = uploaded_files[:3]
+    else:
+        files_to_process = uploaded_files
+
+    # Preview Gambar
+    cols = st.columns(len(files_to_process))
+    for i, file in enumerate(files_to_process):
         img = Image.open(file)
-        cols[i].image(img, caption=f"Timeframe {i+1}", use_container_width=True)
+        cols[i].image(img, caption=f"Timeframe {i+1} (Order: D, H1, M5)", use_container_width=True)
 
-    if st.button("🚀 Jalankan Audit Master ICT"):
-        if len(uploaded_files) < 1:
-            st.warning("Mohon unggah setidaknya satu gambar chart.")
+    if st.button("🚀 Jalankan Audit Elite ICT Pro"):
+        if len(files_to_process) < 3:
+            st.error("Gagal Audit: Anda harus mengunggah tepat 3 gambar untuk analisa top-down yang valid.")
         else:
-            with st.spinner("Sedang melakukan audit ketat pada likuiditas dan struktur..."):
+            with st.spinner("Mengakses model Gemini 1.5 Pro... Menghitung likuiditas dan audit struktur mendalam..."):
                 try:
-                    # Menggunakan model paling stabil dan cerdas untuk visi
-                    model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
+                    # BERALIH KE MODEL PRO YANG JAUH LEBIH CERDAS DAN STABIL
+                    # Ini akan menyelesaikan error 404
+                    model = genai.GenerativeModel(model_name='gemini-1.5-pro')
                     
-                    images_to_analyze = [Image.open(f) for f in uploaded_files]
+                    images_to_analyze = [Image.open(f) for f in files_to_process]
                     
-                    # PROMPT SUPER PRO YANG ANDA MINTA
+                    # PROMPT SUPER ELITE - DITINGKATKAN UNTUK MODEL PRO
                     prompt = """
-                    Anda adalah seorang Master Trader ICT dengan pengalaman 20 tahun. 
-                    Tugas Anda adalah melakukan audit ketat pada 3 gambar chart ini (Daily, H1, M5).
+                    Anda adalah seorang Master Trader ICT paling senior, setara dengan Michael J. Huddleston, dengan keahlian institusional.
+                    Lakukan AUDIT KETAT DAN MENDALAM pada 3 chart ini secara berurutan: Daily (untuk Bias Besar), H1 (untuk Struktur Menengah), dan M5 (untuk Konfirmasi Entry).
 
-                    Gunakan Protokol Analisa berikut:
-                    1. ANALISA LIKUIDITAS: Cari di mana Buy-Side Liquidity (BSL) dan Sell-Side Liquidity (SSL) berada. Apakah sudah di-sweep?
-                    2. STRUKTUR MARKET: Identifikasi Break of Structure (BOS) dan Market Structure Shift (MSS) secara presisi.
-                    3. POINT OF INTEREST (POI): Cari Fair Value Gap (FVG) yang belum terisi (imbalance) atau Order Block (OB) yang valid.
-                    4. DISPLACEMENT: Pastikan ada pergerakan harga yang kuat (displacement) setelah MSS sebelum menentukan entry.
+                    Gunakan Protokol Analisa Elite berikut:
+                    1.  **DRAW ON LIQUIDITY (Daily)**: Tentukan tujuan utama harga berdasarkan timeframe Daily. Cari level Buy-Side Liquidity (BSL) atau Sell-Side Liquidity (SSL) utama yang akan dituju.
+                    2.  **AUDIT LIKUIDITAS & MSS (H1/M5)**: Verifikasi apakah sudah terjadi *valid Liquidity Sweep* sebelum adanya *Market Structure Shift (MSS)*. Jika MSS terjadi tanpa displacement, abaikan setup tersebut.
+                    3.  **VALIDASI POI (M5)**: Cari *Fair Value Gap (FVG)*, *Order Block (OB)*, atau *Breaker Block* di timeframe kecil (M5) yang berkonfluensi dengan POI timeframe besar.
+                    4.  **TANDA PERINGATAN (Red Flags)**: Berikan peringatan jika ada tanda-tanda 'inducement' (pancingan) di M5 sebelum zona entry.
 
                     Berikan jawaban dengan format:
-                    - TREN UTAMA (BIAS):
-                    - KONFIRMASI STRUKTUR:
-                    - AREA ENTRY (Sangat Detail):
-                    - ESTIMASI SL & TP (RR minimal 1:2):
-                    - TINGKAT KEPERCAYAAN (1-100%):
-                    
-                    Berikan narasi dalam Bahasa Indonesia yang tegas, profesional, dan objektif.
+                    -   **NARASI PASAR (BIAS HARIAN & DRAW ON LIQUIDITY):**
+                    -   **AUDIT STRUKTUR (VALIDASI MSS & DISPLACEMENT):**
+                    -   **ZONA ENTRY ELITE (AREA HARGA DETAIL):**
+                    -   **RISK/REWARD & VALIDASI RR (Rasio minimal 1:2.5):**
+                    -   **TINGKAT KEPERCAYAAN INSTITUSIONAL (1-100%):**
+
+                    Gunakan Bahasa Indonesia yang profesional, tegas, dan tajam. Analisa Anda harus mengutamakan keselamatan modal.
                     """
                     
                     response = model.generate_content([prompt] + images_to_analyze)
@@ -94,9 +104,15 @@ if uploaded_files:
                     st.markdown(response.text)
                     
                 except Exception as e:
+                    # Penanganan Error yang Lebih Detail
                     st.error(f"Terjadi kesalahan teknis: {e}")
-                    st.info("Coba segarkan halaman atau cek koneksi internet Anda.")
+                    if "429" in str(e):
+                        st.info("Pesan: Terlalu banyak permintaan API. Mohon tunggu beberapa menit lalu coba lagi.")
+                    elif "404" in str(e):
+                        st.info("Pesan: Masalah API berkelanjutan. Coba buat API Key baru atau hubungi administrator.")
+                    else:
+                        st.info("Coba segarkan halaman atau cek koneksi internet Anda.")
 
 # Footer
 st.divider()
-st.caption("Peringatan: Trading melibatkan risiko tinggi. Gunakan AI hanya sebagai alat bantu konfirmasi analisa Anda.")
+st.caption("Terminal Analisa Level Pro v3.0 | Risiko trading sepenuhnya di tangan pengguna.")
