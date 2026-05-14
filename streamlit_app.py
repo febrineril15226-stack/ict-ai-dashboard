@@ -264,7 +264,7 @@ Gunakan bahasa yang tajam, profesional, dan actionable.
 
         with st.spinner("🧠 AI sedang membedah algoritma pasar... Mohon tunggu."):
             try:
-                model = genai.GenerativeModel('gemini-1.5-pro')
+                model = genai.GenerativeModel('gemini-2.0-flash')
                 response = model.generate_content([prompt] + images)
 
                 st.success("✅ Analisa Institusional Selesai!")
